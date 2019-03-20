@@ -2,8 +2,15 @@
 
 This fork is to allow for the development of aev features using the AutonomouStuff PACMod code base. Development is undertaken on branch, to allow for a pull request at some point.
 
-`feature/aev-pacmod`
+Signals available via pacmod
 
+ ```cpp 
+ 
+ BrakeCmdMsg \t static_cast<uint16_t>(1000.0 * brake_pct)
+ 
+ 
+ 
+ ```
 
 ## PACMod (Platform Actuation and Control MODule) Vehicle Interface #
 
