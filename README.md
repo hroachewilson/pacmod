@@ -1,4 +1,11 @@
-# PACMod (Platform Actuation and Control MODule) Vehicle Interface #
+## AEV PACMod fork
+
+This fork is to allow for the development of aev features using the AutonomouStuff PACMod code base. Development is undertaken on branch, to allow for a pull request at some point.
+
+`feature/aev-pacmod`
+
+
+## PACMod (Platform Actuation and Control MODule) Vehicle Interface #
 
 [![CircleCI](https://circleci.com/gh/astuff/pacmod/tree/master.svg?style=svg)](https://circleci.com/gh/astuff/pacmod/tree/master)
 
