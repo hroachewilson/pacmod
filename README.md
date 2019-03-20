@@ -6,8 +6,8 @@ Signals available via pacmod
 
  ```cpp 
  
- BrakeCmdMsg \t static_cast<uint16_t>(1000.0 * brake_pct)
- 
+ BrakeCmdMsg '\t' static_cast<uint16_t>(1000.0 * brake_pct)
+
  
  
  ```
