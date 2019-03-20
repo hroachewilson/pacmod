@@ -13,4 +13,5 @@ For access to the DBC file which defines the CAN interface for the PACMod, see t
 - Polaris Ranger X900
 - International Prostar+ 122
 - Lexus RX-450h MY 2016+
+- AEV Development Mule
 - More coming soon...
