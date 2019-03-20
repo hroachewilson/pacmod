@@ -467,6 +467,10 @@ int main(int argc, char *argv[])
     {
       veh_type = VehicleType::LEXUS_RX_450H;
     }
+    else if (veh_type_string == "AEV_DEV_MULE")
+    {
+      veh_type = VehicleType::AEV_DEV_MULE;
+    }
     else
     {
       veh_type = VehicleType::POLARIS_GEM;
