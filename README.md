@@ -5,7 +5,7 @@ This fork is to allow for the development of aev features using the AutonomouStu
 Signals available prior to fork, commit [165b742bd655413dba06e335aaf0e2fde921d81e](https://github.com/astuff/pacmod/commit/165b742bd655413dba06e335aaf0e2fde921d81e)
 
  ```cpp 
- // TX
+ // TX, complete set
  BrakeCmdMsg                static_cast<uint16_t>(1000.0 * brake_pct)
  SteerCmdMsg                static_cast<int32_t>(1000.0 * steer_pos), (uint32_t)(1000.0 * steer_spd)
  AccelCmdMsg                static_cast<uint16_t>(accel_cmd * 1000.0)
@@ -16,7 +16,7 @@ Signals available prior to fork, commit [165b742bd655413dba06e335aaf0e2fde921d81
  TurnSignalCmdMsg           uint8_t turn_signal_cmd
  GlobalCmdMsg               bool enable, bool clear_override, bool ignore_overide
 
- // RX
+ // RX, complete set
  ParkingBrakeStatusRptMsg   bool parking_brake_engaged
  SteeringPIDRpt4Msg         double angular_velocity, double angular_acceleration
  SteeringPIDRpt3Msg         double new_torque, double str_angle_desired, double str_angle_actual, double error
@@ -38,8 +38,15 @@ Signals available prior to fork, commit [165b742bd655413dba06e335aaf0e2fde921d81
  GlobalRptMsg               bool enabled, bool override_active, bool user_can_timeout, bool brake_can_timeout,
                             bool steering_can_timeout, bool vehicle_can_timeout, bool user_can_read_errors
  
-
- 
+ // Default RX                          TX
+            GlobalRptMsg                GlobalCmdMsg
+            VinRptMsg                   
+            TurnSignalRptMsg            TurnSignalCmdMsg
+            ShiftRptMsg                 ShiftCmdMsg
+            AccelRptMsg                 AccelCmdMsg
+            SteerRptMsg                 SteerCmdMsg
+            BrakeRptMsg                 BrakeCmdMsg
+            VehicleSpeedRptMsg          
 
  ```
 
