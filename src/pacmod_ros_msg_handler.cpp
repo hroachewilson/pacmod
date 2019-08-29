@@ -471,9 +471,15 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
 {
   std::vector<uint8_t> ret_vec;
 
-  if (can_id == SteerCmdMsg::CAN_ID)
+  if (can_id == FrontSteerCmdMsg::CAN_ID)
   {
-    SteerCmdMsg encoder;
+    FrontSteerCmdMsg encoder;
+    encoder.encode(msg->angular_position, msg->angular_velocity_limit);
+    return encoder.data;
+  }
+  else if (can_id == RearSteerCmdMsg::CAN_ID)
+  {
+    RearSteerCmdMsg encoder;
     encoder.encode(msg->angular_position, msg->angular_velocity_limit);
     return encoder.data;
   }

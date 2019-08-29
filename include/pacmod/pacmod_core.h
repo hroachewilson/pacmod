@@ -440,7 +440,16 @@ public:
   void encode(double accel_cmd);
 };
 
-class SteerCmdMsg :
+class FrontSteerCmdMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(double steer_pos, double steer_spd);
+};
+
+class RearSteerCmdMsg :
   public PacmodRxMsg
 {
 public:

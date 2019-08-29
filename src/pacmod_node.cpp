@@ -198,9 +198,26 @@ void callback_accelerator_set_cmd(const pacmod_msgs::PacmodCmd::ConstPtr& msg)
 }
 
 // Listens for incoming requests to change the position of the steering wheel with a speed limit
-void callback_steering_set_cmd(const pacmod_msgs::PositionWithSpeed::ConstPtr& msg)
+void callback_front_steering_set_cmd(const pacmod_msgs::PositionWithSpeed::ConstPtr& msg)
 {
-  int64_t can_id = SteerCmdMsg::CAN_ID;
+  int64_t can_id = FrontSteerCmdMsg::CAN_ID;
+  auto rx_it = rx_list.find(can_id);
+
+  if (rx_it != rx_list.end())
+  {
+    rx_it->second->setData(PacmodRxRosMsgHandler::unpackAndEncode(can_id, msg));
+    rx_it->second->setIsValid(true);
+  }
+  else
+  {
+    ROS_WARN("Received command message for ID 0x%lx for which we did not have an encoder.", can_id);
+  }
+}
+
+// Listens for incoming requests to change the position of the steering wheel with a speed limit
+void callback_rear_steering_set_cmd(const pacmod_msgs::PositionWithSpeed::ConstPtr& msg)
+{
+  int64_t can_id = RearSteerCmdMsg::CAN_ID;
   auto rx_it = rx_list.find(can_id);
 
   if (rx_it != rx_list.end())
@@ -376,7 +393,7 @@ void can_read(const can_msgs::Frame::ConstPtr &msg)
           else if (msg->id == SteerRptMsg::CAN_ID)
           {
             auto dc_parser = std::dynamic_pointer_cast<SteerRptMsg>(parser_class);
-            SteerCmdMsg encoder;
+            FrontSteerCmdMsg encoder;
 
             encoder.encode(dc_parser->output, 2.0);
             rx_it->second->setData(encoder.data);
@@ -508,7 +525,8 @@ int main(int argc, char *argv[])
   ros::Subscriber turn_set_cmd_sub = n.subscribe("as_rx/turn_cmd", 20, callback_turn_signal_set_cmd);
   ros::Subscriber shift_set_cmd_sub = n.subscribe("as_rx/shift_cmd", 20, callback_shift_set_cmd);
   ros::Subscriber accelerator_set_cmd = n.subscribe("as_rx/accel_cmd", 20, callback_accelerator_set_cmd);
-  ros::Subscriber steering_set_cmd = n.subscribe("as_rx/steer_cmd", 20, callback_steering_set_cmd);
+  ros::Subscriber front_steering_set_cmd = n.subscribe("as_rx/front_steer_cmd", 20, callback_front_steering_set_cmd);
+  ros::Subscriber rear_steering_set_cmd = n.subscribe("as_rx/rear_steer_cmd", 20, callback_rear_steering_set_cmd);
   ros::Subscriber brake_set_cmd = n.subscribe("as_rx/brake_cmd", 20, callback_brake_set_cmd);
   ros::Subscriber enable_sub = n.subscribe("as_rx/enable", 20, callback_pacmod_enable);
 
@@ -517,14 +535,16 @@ int main(int argc, char *argv[])
   std::shared_ptr<LockedData> turn_data(new LockedData);
   std::shared_ptr<LockedData> shift_data(new LockedData);
   std::shared_ptr<LockedData> accel_data(new LockedData);
-  std::shared_ptr<LockedData> steer_data(new LockedData);
+  std::shared_ptr<LockedData> front_steer_data(new LockedData);
+  std::shared_ptr<LockedData> rear_steer_data(new LockedData);
   std::shared_ptr<LockedData> brake_data(new LockedData);
 
   rx_list.insert(std::make_pair(GlobalCmdMsg::CAN_ID, global_data));
   rx_list.insert(std::make_pair(TurnSignalCmdMsg::CAN_ID, turn_data));
   rx_list.insert(std::make_pair(ShiftCmdMsg::CAN_ID, shift_data));
   rx_list.insert(std::make_pair(AccelCmdMsg::CAN_ID, accel_data));
-  rx_list.insert(std::make_pair(SteerCmdMsg::CAN_ID, steer_data));
+  rx_list.insert(std::make_pair(FrontSteerCmdMsg::CAN_ID, front_steer_data));
+  rx_list.insert(std::make_pair(RearSteerCmdMsg::CAN_ID, rear_steer_data));
   rx_list.insert(std::make_pair(BrakeCmdMsg::CAN_ID, brake_data));
 
   if (veh_type == VehicleType::POLARIS_GEM ||
@@ -616,7 +636,7 @@ int main(int argc, char *argv[])
   rpt_cmd_list.insert(std::make_pair(TurnSignalRptMsg::CAN_ID, TurnSignalCmdMsg::CAN_ID));
   rpt_cmd_list.insert(std::make_pair(ShiftRptMsg::CAN_ID, ShiftCmdMsg::CAN_ID));
   rpt_cmd_list.insert(std::make_pair(AccelRptMsg::CAN_ID, AccelCmdMsg::CAN_ID));
-  rpt_cmd_list.insert(std::make_pair(SteerRptMsg::CAN_ID, SteerCmdMsg::CAN_ID));
+  rpt_cmd_list.insert(std::make_pair(SteerRptMsg::CAN_ID, FrontSteerCmdMsg::CAN_ID));
   rpt_cmd_list.insert(std::make_pair(BrakeRptMsg::CAN_ID, BrakeCmdMsg::CAN_ID));
 
   if (veh_type == VehicleType::INTERNATIONAL_PROSTAR_122)
