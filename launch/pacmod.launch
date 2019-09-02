@@ -24,7 +24,7 @@
     <remap from="sent_messages" to="can_rx" />
   </node>
 
-  <node pkg="pacmod" type="pacmod" name="pacmod">
+  <node pkg="pacmod" type="pacmod" name="pacmod" output="screen">
     <param name="vehicle_type" value="$(arg pacmod_vehicle_type)" />
   </node>  
 </launch>

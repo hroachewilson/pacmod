@@ -47,7 +47,8 @@ public:
   bool override_active;
   bool user_can_timeout;
   bool brake_can_timeout;
-  bool steering_can_timeout;
+  bool front_steering_can_timeout;
+  bool rear_steering_can_timeout;
   bool vehicle_can_timeout;
   uint16_t user_can_read_errors;
 

@@ -148,7 +148,8 @@ void GlobalRptMsg::parse(uint8_t *in)
   override_active = ((in[0] & 0x02) >> 1) != 0;
   user_can_timeout = ((in[0] & 0x20) >> 5) != 0;
   brake_can_timeout = ((in[0] & 0x10) >> 4) != 0;
-  steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
+  front_steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
+  rear_steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
   vehicle_can_timeout = ((in[0] & 0x04) >> 2) != 0;
   user_can_read_errors = ((in[6] << 8) | in[7]);
 }
