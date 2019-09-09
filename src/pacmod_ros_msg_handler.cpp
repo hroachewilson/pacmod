@@ -202,7 +202,8 @@ void PacmodTxRosMsgHandler::fillGlobalRpt(const std::shared_ptr<PacmodTxMsg>& pa
   new_msg->override_active = dc_parser->override_active;
   new_msg->user_can_timeout = dc_parser->user_can_timeout;
   new_msg->brake_can_timeout = dc_parser->brake_can_timeout;
-  new_msg->steering_can_timeout = dc_parser->steering_can_timeout;
+  new_msg->front_steering_can_timeout = dc_parser->front_steering_can_timeout;
+  new_msg->rear_steering_can_timeout = dc_parser->rear_steering_can_timeout;
   new_msg->vehicle_can_timeout = dc_parser->vehicle_can_timeout;
   new_msg->user_can_read_errors = dc_parser->user_can_read_errors;
 
@@ -471,9 +472,15 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
 {
   std::vector<uint8_t> ret_vec;
 
-  if (can_id == SteerCmdMsg::CAN_ID)
+  if (can_id == FrontSteerCmdMsg::CAN_ID)
   {
-    SteerCmdMsg encoder;
+    FrontSteerCmdMsg encoder;
+    encoder.encode(msg->angular_position, msg->angular_velocity_limit);
+    return encoder.data;
+  }
+  else if (can_id == RearSteerCmdMsg::CAN_ID)
+  {
+    RearSteerCmdMsg encoder;
     encoder.encode(msg->angular_position, msg->angular_velocity_limit);
     return encoder.data;
   }

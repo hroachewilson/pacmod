@@ -18,9 +18,10 @@ const int64_t AS::Drivers::PACMod::AccelRptMsg::CAN_ID = 0x68;
 const int64_t AS::Drivers::PACMod::GlobalCmdMsg::CAN_ID = 0x69;
 const int64_t AS::Drivers::PACMod::GlobalRptMsg::CAN_ID = 0x6A;
 const int64_t AS::Drivers::PACMod::BrakeCmdMsg::CAN_ID = 0x6B;
-const int64_t AS::Drivers::PACMod::SteerCmdMsg::CAN_ID = 0x6D;
 const int64_t AS::Drivers::PACMod::BrakeRptMsg::CAN_ID = 0x6C;
-const int64_t AS::Drivers::PACMod::SteerRptMsg::CAN_ID = 0x6E;
+const int64_t AS::Drivers::PACMod::FrontSteerCmdMsg::CAN_ID = 0x6D;
+const int64_t AS::Drivers::PACMod::RearSteerCmdMsg::CAN_ID = 0x6E;
+const int64_t AS::Drivers::PACMod::SteerRptMsg::CAN_ID = 0x85;
 const int64_t AS::Drivers::PACMod::VehicleSpeedRptMsg::CAN_ID = 0x6F;
 const int64_t AS::Drivers::PACMod::BrakeMotorRpt1Msg::CAN_ID = 0x70;
 const int64_t AS::Drivers::PACMod::BrakeMotorRpt2Msg::CAN_ID = 0x71;
@@ -147,7 +148,8 @@ void GlobalRptMsg::parse(uint8_t *in)
   override_active = ((in[0] & 0x02) >> 1) != 0;
   user_can_timeout = ((in[0] & 0x20) >> 5) != 0;
   brake_can_timeout = ((in[0] & 0x10) >> 4) != 0;
-  steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
+  front_steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
+  rear_steering_can_timeout = ((in[0] & 0x08) >> 3) != 0;
   vehicle_can_timeout = ((in[0] & 0x04) >> 2) != 0;
   user_can_read_errors = ((in[6] << 8) | in[7]);
 }
@@ -490,7 +492,23 @@ void AccelCmdMsg::encode(double accel_cmd)
   data[1] = cmdInt & 0x00FF;
 }
 
-void SteerCmdMsg::encode(double steer_pos, double steer_spd)
+void FrontSteerCmdMsg::encode(double steer_pos, double steer_spd)
+{
+  data.assign(8, 0);
+  int32_t raw_pos = static_cast<int32_t>(1000.0 * steer_pos);
+  uint32_t raw_spd = (uint32_t)(1000.0 * steer_spd);
+
+  data[0] = (raw_pos & 0xFF000000) >> 24;
+  data[1] = (raw_pos & 0x00FF0000) >> 16;
+  data[2] = (raw_pos & 0x0000FF00) >> 8;
+  data[3] = raw_pos & 0x000000FF;
+  data[4] = (raw_spd & 0xFF000000) >> 24;
+  data[5] = (raw_spd & 0x00FF0000) >> 16;
+  data[6] = (raw_spd & 0x0000FF00) >> 8;
+  data[7] = raw_spd & 0x000000FF;
+}
+
+void RearSteerCmdMsg::encode(double steer_pos, double steer_spd)
 {
   data.assign(8, 0);
   int32_t raw_pos = static_cast<int32_t>(1000.0 * steer_pos);

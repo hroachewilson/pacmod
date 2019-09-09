@@ -25,7 +25,8 @@ enum VehicleType
   POLARIS_GEM,
   POLARIS_RANGER,
   INTERNATIONAL_PROSTAR_122,
-  LEXUS_RX_450H
+  LEXUS_RX_450H,
+  AEV_DEV_MULE
 };
 
 class PacmodTxMsg
@@ -46,7 +47,8 @@ public:
   bool override_active;
   bool user_can_timeout;
   bool brake_can_timeout;
-  bool steering_can_timeout;
+  bool front_steering_can_timeout;
+  bool rear_steering_can_timeout;
   bool vehicle_can_timeout;
   uint16_t user_can_read_errors;
 
@@ -439,7 +441,16 @@ public:
   void encode(double accel_cmd);
 };
 
-class SteerCmdMsg :
+class FrontSteerCmdMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(double steer_pos, double steer_spd);
+};
+
+class RearSteerCmdMsg :
   public PacmodRxMsg
 {
 public:
