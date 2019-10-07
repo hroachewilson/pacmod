@@ -49,17 +49,18 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
                                            const ros::Publisher& pub,
                                            const std::shared_ptr<PacmodTxMsg>& parser_class)
 {
-  if (can_id == TurnSignalRptMsg::CAN_ID ||
-      can_id == ShiftRptMsg::CAN_ID ||
-      can_id == HeadlightRptMsg::CAN_ID ||
-      can_id == HornRptMsg::CAN_ID ||
-      can_id == WiperRptMsg::CAN_ID)
-  {
-    pacmod_msgs::SystemRptInt new_msg;
-    fillSystemRptInt(parser_class, &new_msg, frame_id);
-    pub.publish(new_msg);
-  }
-  else if (can_id == AccelRptMsg::CAN_ID ||
+  //if (can_id == TurnSignalRptMsg::CAN_ID ||
+  //    can_id == ShiftRptMsg::CAN_ID ||
+  //    can_id == HeadlightRptMsg::CAN_ID ||
+  //    can_id == HornRptMsg::CAN_ID ||
+  //    can_id == WiperRptMsg::CAN_ID)
+  //{
+  //  pacmod_msgs::SystemRptInt new_msg;
+  //  fillSystemRptInt(parser_class, &new_msg, frame_id);
+  //  pub.publish(new_msg);
+  //}
+  //else
+  if (can_id == AccelRptMsg::CAN_ID ||
            can_id == BrakeRptMsg::CAN_ID ||
            can_id == SteerRptMsg::CAN_ID ||
            can_id == SteerRpt2Msg::CAN_ID ||
@@ -126,12 +127,12 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
     fillSteeringPIDRpt3(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
-  else if (can_id == ParkingBrakeStatusRptMsg::CAN_ID)
-  {
-    pacmod_msgs::ParkingBrakeStatusRpt new_msg;
-    fillParkingBrakeStatusRpt(parser_class, &new_msg, frame_id);
-    pub.publish(new_msg);
-  }
+  //else if (can_id == ParkingBrakeStatusRptMsg::CAN_ID)
+  //{
+  //  pacmod_msgs::ParkingBrakeStatusRpt new_msg;
+  //  fillParkingBrakeStatusRpt(parser_class, &new_msg, frame_id);
+  //  pub.publish(new_msg);
+  //}
   else if (can_id == YawRateRptMsg::CAN_ID)
   {
     pacmod_msgs::YawRateRpt new_msg;
@@ -156,12 +157,12 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
     fillSteeringPIDRpt4(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
-  else if (can_id == VinRptMsg::CAN_ID)
-  {
-    pacmod_msgs::VinRpt new_msg;
-    fillVinRpt(parser_class, &new_msg, frame_id);
-    pub.publish(new_msg);
-  }
+  //else if (can_id == VinRptMsg::CAN_ID)
+  //{
+  //  pacmod_msgs::VinRpt new_msg;
+  //  fillVinRpt(parser_class, &new_msg, frame_id);
+  //  pub.publish(new_msg);
+  //}
 }
 
 void PacmodTxRosMsgHandler::fillSystemRptInt(const std::shared_ptr<PacmodTxMsg>& parser_class,
@@ -326,17 +327,17 @@ void PacmodTxRosMsgHandler::fillSteeringPIDRpt3(const std::shared_ptr<PacmodTxMs
   new_msg->header.stamp = ros::Time::now();
 }
 
-void PacmodTxRosMsgHandler::fillParkingBrakeStatusRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
-                                                      pacmod_msgs::ParkingBrakeStatusRpt* new_msg,
-                                                      std::string frame_id)
-{
-  auto dc_parser = std::dynamic_pointer_cast<ParkingBrakeStatusRptMsg>(parser_class);
-
-  new_msg->parking_brake_engaged = dc_parser->parking_brake_engaged;
-
-  new_msg->header.frame_id = frame_id;
-  new_msg->header.stamp = ros::Time::now();
-}
+//void PacmodTxRosMsgHandler::fillParkingBrakeStatusRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
+//                                                      pacmod_msgs::ParkingBrakeStatusRpt* new_msg,
+//                                                      std::string frame_id)
+//{
+//  auto dc_parser = std::dynamic_pointer_cast<ParkingBrakeStatusRptMsg>(parser_class);
+//
+//  new_msg->parking_brake_engaged = dc_parser->parking_brake_engaged;
+//
+//  new_msg->header.frame_id = frame_id;
+//  new_msg->header.stamp = ros::Time::now();
+//}
 
 void PacmodTxRosMsgHandler::fillYawRateRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                            pacmod_msgs::YawRateRpt* new_msg,
@@ -398,38 +399,39 @@ void PacmodTxRosMsgHandler::fillSteeringPIDRpt4(const std::shared_ptr<PacmodTxMs
   new_msg->header.stamp = ros::Time::now();
 }
 
-void PacmodTxRosMsgHandler::fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
-                                       pacmod_msgs::VinRpt* new_msg,
-                                       std::string frame_id)
-{
-  auto dc_parser = std::dynamic_pointer_cast<VinRptMsg>(parser_class);
-
-  new_msg->mfg_code = dc_parser->mfg_code;
-  new_msg->mfg = dc_parser->mfg;
-  new_msg->model_year_code = dc_parser->model_year_code;
-  new_msg->model_year = dc_parser->model_year;
-  new_msg->serial = dc_parser->serial;
-
-  new_msg->header.frame_id = frame_id;
-  new_msg->header.stamp = ros::Time::now();
-}
+//void PacmodTxRosMsgHandler::fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
+//                                       pacmod_msgs::VinRpt* new_msg,
+//                                       std::string frame_id)
+//{
+//  auto dc_parser = std::dynamic_pointer_cast<VinRptMsg>(parser_class);
+//
+//  new_msg->mfg_code = dc_parser->mfg_code;
+//  new_msg->mfg = dc_parser->mfg;
+//  new_msg->model_year_code = dc_parser->model_year_code;
+//  new_msg->model_year = dc_parser->model_year;
+//  new_msg->serial = dc_parser->serial;
+//
+//  new_msg->header.frame_id = frame_id;
+//  new_msg->header.stamp = ros::Time::now();
+//}
 
 std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
                                                             const pacmod_msgs::PacmodCmd::ConstPtr& msg)
 {
-  if (can_id == TurnSignalCmdMsg::CAN_ID)
-  {
-    TurnSignalCmdMsg encoder;
-    encoder.encode(msg->ui16_cmd);
-    return encoder.data;
-  }
-  else if (can_id == ShiftCmdMsg::CAN_ID)
-  {
-    ShiftCmdMsg encoder;
-    encoder.encode(msg->ui16_cmd);
-    return encoder.data;
-  }
-  else if (can_id == AccelCmdMsg::CAN_ID)
+  //if (can_id == TurnSignalCmdMsg::CAN_ID)
+  //{
+  //  TurnSignalCmdMsg encoder;
+  //  encoder.encode(msg->ui16_cmd);
+  //  return encoder.data;
+  //}
+  //else if (can_id == ShiftCmdMsg::CAN_ID)
+  //{
+  //  ShiftCmdMsg encoder;
+  //  encoder.encode(msg->ui16_cmd);
+  //  return encoder.data;
+  //}
+  //else
+  if (can_id == AccelCmdMsg::CAN_ID)
   {
     AccelCmdMsg encoder;
     encoder.encode(msg->f64_cmd);
@@ -447,24 +449,24 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
     encoder.encode(msg->f64_cmd);
     return encoder.data;
   }
-  else if (can_id == HeadlightCmdMsg::CAN_ID)
-  {
-    HeadlightCmdMsg encoder;
-    encoder.encode(msg->ui16_cmd);
-    return encoder.data;
-  }
-  else if (can_id == HornCmdMsg::CAN_ID)
-  {
-    HornCmdMsg encoder;
-    encoder.encode(msg->ui16_cmd);
-    return encoder.data;
-  }
-  else if (can_id == WiperCmdMsg::CAN_ID)
-  {
-    WiperCmdMsg encoder;
-    encoder.encode(msg->ui16_cmd);
-    return encoder.data;
-  }
+  //else if (can_id == HeadlightCmdMsg::CAN_ID)
+  //{
+  //  HeadlightCmdMsg encoder;
+  //  encoder.encode(msg->ui16_cmd);
+  //  return encoder.data;
+  //}
+  //else if (can_id == HornCmdMsg::CAN_ID)
+  //{
+  //  HornCmdMsg encoder;
+  //  encoder.encode(msg->ui16_cmd);
+  //  return encoder.data;
+  //}
+  //else if (can_id == WiperCmdMsg::CAN_ID)
+  //{
+  //  WiperCmdMsg encoder;
+  //  encoder.encode(msg->ui16_cmd);
+  //  return encoder.data;
+  //}
 }
 
 std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
@@ -482,6 +484,19 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
   {
     RearSteerCmdMsg encoder;
     encoder.encode(msg->angular_position, msg->angular_velocity_limit);
+    return encoder.data;
+  }
+}
+
+std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
+                                                            const pacmod_msgs::VehicleSpeedCmd::ConstPtr& msg)
+{
+  std::vector<uint8_t> ret_vec;
+
+  if (can_id == VehicleSpeedCmdMsg::CAN_ID)
+  {
+    VehicleSpeedCmdMsg encoder;
+    encoder.encode(msg->vehicle_speed, msg->vehicle_speed_valid);
     return encoder.data;
   }
 }

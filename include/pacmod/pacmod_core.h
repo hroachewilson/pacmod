@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cmath>
 
 namespace AS
 {
@@ -55,20 +56,20 @@ public:
   void parse(uint8_t *in);
 };
 
-class VinRptMsg :
-  public PacmodTxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  std::string mfg_code;
-  std::string mfg;
-  char model_year_code;
-  uint32_t model_year;
-  uint32_t serial;
-
-  void parse(uint8_t *in);
-};
+//class VinRptMsg :
+//  public PacmodTxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  std::string mfg_code;
+//  std::string mfg;
+//  char model_year_code;
+//  uint32_t model_year;
+//  uint32_t serial;
+//
+//  void parse(uint8_t *in);
+//};
 
 class SystemRptIntMsg :
   public PacmodTxMsg
@@ -81,40 +82,40 @@ public:
   void parse(uint8_t *in);
 };
 
-class TurnSignalRptMsg :
-  public SystemRptIntMsg
-{
-public:
-  static const int64_t CAN_ID;
-};
-
-class HeadlightRptMsg :
-  public SystemRptIntMsg
-{
-public:
-  static const int64_t CAN_ID;
-};
-
-class HornRptMsg :
-  public SystemRptIntMsg
-{
-public:
-  static const int64_t CAN_ID;
-};
-
-class WiperRptMsg :
-  public SystemRptIntMsg
-{
-public:
-  static const int64_t CAN_ID;
-};
-
-class ShiftRptMsg :
-  public SystemRptIntMsg
-{
-public:
-  static const int64_t CAN_ID;
-};
+//class TurnSignalRptMsg :
+//  public SystemRptIntMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//};
+//
+//class HeadlightRptMsg :
+//  public SystemRptIntMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//};
+//
+//class HornRptMsg :
+//  public SystemRptIntMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//};
+//
+//class WiperRptMsg :
+//  public SystemRptIntMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//};
+//
+//class ShiftRptMsg :
+//  public SystemRptIntMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//};
 
 class SystemRptFloatMsg :
   public PacmodTxMsg
@@ -360,16 +361,16 @@ public:
   void parse(uint8_t *in);
 };
 
-class ParkingBrakeStatusRptMsg :
-  public PacmodTxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  bool parking_brake_engaged;
-
-  void parse(uint8_t *in);
-};
+//class ParkingBrakeStatusRptMsg :
+//  public PacmodTxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  bool parking_brake_engaged;
+//
+//  void parse(uint8_t *in);
+//};
 
 // RX Messages
 class PacmodRxMsg
@@ -387,50 +388,50 @@ public:
   void encode(bool enable, bool clear_override, bool ignore_overide);
 };
 
-class TurnSignalCmdMsg :
-  public PacmodRxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  void encode(uint8_t turn_signal_cmd);
-};
-
-class HeadlightCmdMsg :
-  public PacmodRxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  void encode(uint8_t headlight_cmd);
-};
-
-class HornCmdMsg :
-  public PacmodRxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  void encode(uint8_t horn_cmd);
-};
-
-class WiperCmdMsg :
-  public PacmodRxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  void encode(uint8_t wiper_cmd);
-};
-
-class ShiftCmdMsg :
-  public PacmodRxMsg
-{
-public:
-  static const int64_t CAN_ID;
-
-  void encode(uint8_t shift_cmd);
-};
+//class TurnSignalCmdMsg :
+//  public PacmodRxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  void encode(uint8_t turn_signal_cmd);
+//};
+//
+//class HeadlightCmdMsg :
+//  public PacmodRxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  void encode(uint8_t headlight_cmd);
+//};
+//
+//class HornCmdMsg :
+//  public PacmodRxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  void encode(uint8_t horn_cmd);
+//};
+//
+//class WiperCmdMsg :
+//  public PacmodRxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  void encode(uint8_t wiper_cmd);
+//};
+//
+//class ShiftCmdMsg :
+//  public PacmodRxMsg
+//{
+//public:
+//  static const int64_t CAN_ID;
+//
+//  void encode(uint8_t shift_cmd);
+//};
 
 class AccelCmdMsg :
   public PacmodRxMsg
@@ -439,6 +440,15 @@ public:
   static const int64_t CAN_ID;
 
   void encode(double accel_cmd);
+};
+
+class VehicleSpeedCmdMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(double vehicle_speed, bool vehicle_speed_valid);
 };
 
 class FrontSteerCmdMsg :
