@@ -74,9 +74,9 @@ std::shared_ptr<PacmodTxMsg> PacmodTxMsg::make_message(const int64_t& can_id)
   case VehicleSpeedRptMsg::CAN_ID:
     return std::shared_ptr<PacmodTxMsg>(new VehicleSpeedRptMsg);
     break;
-  //case VehicleSpeedCmdMsg::CAN_ID:
-  //  return std::shared_ptr<PacmodRxMsg>(new VehicleSpeedCmdMsg);
-  //  break;
+  case VehicleSpeedCmdMsg::CAN_ID:
+    return std::shared_ptr<PacmodRxMsg>(new VehicleSpeedCmdMsg);
+    break;
   case BrakeMotorRpt1Msg::CAN_ID:
     return std::shared_ptr<PacmodTxMsg>(new BrakeMotorRpt1Msg);
     break;
