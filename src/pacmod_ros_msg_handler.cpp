@@ -49,6 +49,7 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
                                            const ros::Publisher& pub,
                                            const std::shared_ptr<PacmodTxMsg>& parser_class)
 {
+#if 0
   if (can_id == TurnSignalRptMsg::CAN_ID ||
       can_id == ShiftRptMsg::CAN_ID ||
       can_id == HeadlightRptMsg::CAN_ID ||
@@ -59,9 +60,13 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
     fillSystemRptInt(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
-  else if (can_id == AccelRptMsg::CAN_ID ||
+  else
+#endif
+  if (can_id == AccelRptMsg::CAN_ID ||
            can_id == BrakeRptMsg::CAN_ID ||
+#if 0
            can_id == SteerRptMsg::CAN_ID ||
+#endif
            can_id == SteerRpt2Msg::CAN_ID ||
            can_id == SteerRpt3Msg::CAN_ID)
   {
@@ -126,12 +131,14 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
     fillSteeringPIDRpt3(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
+#if 0
   else if (can_id == ParkingBrakeStatusRptMsg::CAN_ID)
   {
     pacmod_msgs::ParkingBrakeStatusRpt new_msg;
     fillParkingBrakeStatusRpt(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
+#endif
   else if (can_id == YawRateRptMsg::CAN_ID)
   {
     pacmod_msgs::YawRateRpt new_msg;
@@ -156,12 +163,14 @@ void PacmodTxRosMsgHandler::fillAndPublish(const int64_t& can_id,
     fillSteeringPIDRpt4(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
+#if 0
   else if (can_id == VinRptMsg::CAN_ID)
   {
     pacmod_msgs::VinRpt new_msg;
     fillVinRpt(parser_class, &new_msg, frame_id);
     pub.publish(new_msg);
   }
+#endif
 }
 
 void PacmodTxRosMsgHandler::fillSystemRptInt(const std::shared_ptr<PacmodTxMsg>& parser_class,
@@ -326,6 +335,7 @@ void PacmodTxRosMsgHandler::fillSteeringPIDRpt3(const std::shared_ptr<PacmodTxMs
   new_msg->header.stamp = ros::Time::now();
 }
 
+#if 0
 void PacmodTxRosMsgHandler::fillParkingBrakeStatusRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                                       pacmod_msgs::ParkingBrakeStatusRpt* new_msg,
                                                       std::string frame_id)
@@ -337,6 +347,7 @@ void PacmodTxRosMsgHandler::fillParkingBrakeStatusRpt(const std::shared_ptr<Pacm
   new_msg->header.frame_id = frame_id;
   new_msg->header.stamp = ros::Time::now();
 }
+#endif
 
 void PacmodTxRosMsgHandler::fillYawRateRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                            pacmod_msgs::YawRateRpt* new_msg,
@@ -398,6 +409,21 @@ void PacmodTxRosMsgHandler::fillSteeringPIDRpt4(const std::shared_ptr<PacmodTxMs
   new_msg->header.stamp = ros::Time::now();
 }
 
+void PacmodTxRosMsgHandler::fillPIDTuningCmdRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
+                                                pacmod_msgs::PIDTuningCmdRpt* new_msg,
+                                                std::string frame_id)
+{
+  auto dc_parser = std::dynamic_pointer_cast<PIDTuningCmdRptMsg>(parser_class);
+
+  new_msg->selection = dc_parser->selection;
+  new_msg->term = dc_parser->term;
+  new_msg->value = dc_parser->value;
+
+  new_msg->header.frame_id = frame_id;
+  new_msg->header.stamp = ros::Time::now();
+}
+
+#if 0
 void PacmodTxRosMsgHandler::fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                        pacmod_msgs::VinRpt* new_msg,
                                        std::string frame_id)
@@ -413,10 +439,12 @@ void PacmodTxRosMsgHandler::fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parse
   new_msg->header.frame_id = frame_id;
   new_msg->header.stamp = ros::Time::now();
 }
+#endif
 
 std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
                                                             const pacmod_msgs::PacmodCmd::ConstPtr& msg)
 {
+#if 0
   if (can_id == TurnSignalCmdMsg::CAN_ID)
   {
     TurnSignalCmdMsg encoder;
@@ -429,7 +457,9 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
     encoder.encode(msg->ui16_cmd);
     return encoder.data;
   }
-  else if (can_id == AccelCmdMsg::CAN_ID)
+  else
+#endif
+  if (can_id == AccelCmdMsg::CAN_ID)
   {
     AccelCmdMsg encoder;
     encoder.encode(msg->f64_cmd);
@@ -447,6 +477,7 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
     encoder.encode(msg->f64_cmd);
     return encoder.data;
   }
+#if 0
   else if (can_id == HeadlightCmdMsg::CAN_ID)
   {
     HeadlightCmdMsg encoder;
@@ -465,6 +496,7 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
     encoder.encode(msg->ui16_cmd);
     return encoder.data;
   }
+#endif
 }
 
 std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
@@ -485,3 +517,43 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
     return encoder.data;
   }
 }
+
+std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
+                                                            const pacmod_msgs::VehicleSpeedCmd::ConstPtr& msg)
+{
+  std::vector<uint8_t> ret_vec;
+
+  if (can_id == VehicleSpeedCmdMsg::CAN_ID)
+  {
+    VehicleSpeedCmdMsg encoder;
+    encoder.encode(msg->vehicle_speed, msg->vehicle_speed_valid);
+    return encoder.data;
+  }
+}
+
+std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
+                                                            const pacmod_msgs::PIDTuningCmd::ConstPtr& msg)
+{
+  std::vector<uint8_t> ret_vec;
+
+  if (can_id == PIDTuningCmdMsg::CAN_ID)
+  {
+    PIDTuningCmdMsg encoder;
+    encoder.encode( msg->selection, msg->term, msg->oper, msg->value);
+    return encoder.data;
+  }
+}
+
+std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
+                                                            const pacmod_msgs::ControlMode::ConstPtr& msg)
+{
+  std::vector<uint8_t> ret_vec;
+
+  if (can_id == ControlModeMsg::CAN_ID)
+  {
+    ControlModeMsg encoder;
+    encoder.encode( msg->autopilot, msg->can_active);
+    return encoder.data;
+  }
+}
+

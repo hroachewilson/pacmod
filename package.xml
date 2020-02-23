@@ -2,12 +2,11 @@
 <package format="2">
   <name>pacmod</name>
   <version>2.0.2</version>
-  <description>AutonomouStuff PACMod driver package</description>
-  <license>MIT</license>
+  <description>AEV CAN driver package</description>
+  <license>Copyright (C) Applied Electric Vehicles - All Rights Reserved</license>
 
-  <maintainer email="software@autonomoustuff.com">AutonomouStuff Software Team</maintainer>
-  <author email="jdriscoll@autonomoustuff.com">Joe Driscoll</author>
-  <author email="jwhitley@autonomoustuff.com">Josh Whitley</author>
+  <maintainer email="harry.roache-wilson@appliedev.com">AEV Software Team</maintainer>
+  <author email="harry.roache-wilson@appliedev.com">Harry Roache-Wilson</author>
 
   <build_depend>roslint</build_depend>
 

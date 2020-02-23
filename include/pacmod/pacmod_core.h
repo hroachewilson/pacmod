@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cmath>
 
 namespace AS
 {
@@ -55,6 +56,7 @@ public:
   void parse(uint8_t *in);
 };
 
+#if 0
 class VinRptMsg :
   public PacmodTxMsg
 {
@@ -69,6 +71,7 @@ public:
 
   void parse(uint8_t *in);
 };
+#endif
 
 class SystemRptIntMsg :
   public PacmodTxMsg
@@ -81,6 +84,7 @@ public:
   void parse(uint8_t *in);
 };
 
+#if 0
 class TurnSignalRptMsg :
   public SystemRptIntMsg
 {
@@ -115,6 +119,7 @@ class ShiftRptMsg :
 public:
   static const int64_t CAN_ID;
 };
+#endif
 
 class SystemRptFloatMsg :
   public PacmodTxMsg
@@ -133,14 +138,14 @@ class AccelRptMsg :
 public:
   static const int64_t CAN_ID;
 };
-
+#if 0
 class SteerRptMsg :
   public SystemRptFloatMsg
 {
 public:
   static const int64_t CAN_ID;
 };
-
+#endif
 class SteerRpt2Msg :
   public SystemRptFloatMsg
 {
@@ -360,6 +365,20 @@ public:
   void parse(uint8_t *in);
 };
 
+class PIDTuningCmdRptMsg :
+  public PacmodTxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  uint8_t selection;
+  uint8_t term;
+  float value; 
+
+  void parse(uint8_t *in);
+};
+
+#if 0
 class ParkingBrakeStatusRptMsg :
   public PacmodTxMsg
 {
@@ -370,6 +389,7 @@ public:
 
   void parse(uint8_t *in);
 };
+#endif
 
 // RX Messages
 class PacmodRxMsg
@@ -387,6 +407,7 @@ public:
   void encode(bool enable, bool clear_override, bool ignore_overide);
 };
 
+#if 0
 class TurnSignalCmdMsg :
   public PacmodRxMsg
 {
@@ -431,6 +452,7 @@ public:
 
   void encode(uint8_t shift_cmd);
 };
+#endif
 
 class AccelCmdMsg :
   public PacmodRxMsg
@@ -439,6 +461,33 @@ public:
   static const int64_t CAN_ID;
 
   void encode(double accel_cmd);
+};
+
+class VehicleSpeedCmdMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(double vehicle_speed, bool vehicle_speed_valid);
+};
+
+class PIDTuningCmdMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(uint8_t selection, uint8_t term, uint8_t oper, float incremental);
+};
+
+class ControlModeMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(bool autopilot, bool can_active);
 };
 
 class FrontSteerCmdMsg :

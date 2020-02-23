@@ -76,9 +76,11 @@ private:
   void fillSteeringPIDRpt3(const std::shared_ptr<PacmodTxMsg>& parser_class,
                            pacmod_msgs::SteeringPIDRpt3* new_msg,
                            std::string frame_id);
+#if 0 
   void fillParkingBrakeStatusRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                  pacmod_msgs::ParkingBrakeStatusRpt* new_msg,
                                  std::string frame_id);
+#endif
   void fillYawRateRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                       pacmod_msgs::YawRateRpt* new_msg,
                       std::string frame_id);
@@ -91,9 +93,14 @@ private:
   void fillSteeringPIDRpt4(const std::shared_ptr<PacmodTxMsg>& parser_class,
                            pacmod_msgs::SteeringPIDRpt4* new_msg,
                            std::string frame_id);
+  void fillPIDTuningCmdRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
+                           pacmod_msgs::PIDTuningCmdRpt* new_msg,
+                           std::string frame_id);
+#if 0
   void fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                   pacmod_msgs::VinRpt* new_msg,
                   std::string frame_id);
+#endif
 };
 
 class PacmodRxRosMsgHandler
@@ -103,6 +110,12 @@ public:
                                               const pacmod_msgs::PacmodCmd::ConstPtr& msg);
   static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
                                               const pacmod_msgs::PositionWithSpeed::ConstPtr& msg);
+  static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
+                                              const pacmod_msgs::VehicleSpeedCmd::ConstPtr& msg);
+  static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
+                                              const pacmod_msgs::PIDTuningCmd::ConstPtr& msg);
+  static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
+                                              const pacmod_msgs::ControlMode::ConstPtr& msg);
 };
 }   // namespace PACMod
 }   // namespace Drivers
