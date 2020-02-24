@@ -423,6 +423,18 @@ void PacmodTxRosMsgHandler::fillPIDTuningCmdRpt(const std::shared_ptr<PacmodTxMs
   new_msg->header.stamp = ros::Time::now();
 }
 
+void PacmodTxRosMsgHandler::fillEncoderValue(const std::shared_ptr<PacmodTxMsg>& parser_class,
+                                                pacmod_msgs::EncoderValue* new_msg,
+                                                std::string frame_id)
+{
+  auto dc_parser = std::dynamic_pointer_cast<EncoderValueMsg>(parser_class);
+
+  new_msg->encoderAngle = dc_parser->encoderAngle;
+
+  new_msg->header.frame_id = frame_id;
+  new_msg->header.stamp = ros::Time::now();
+}
+
 #if 0
 void PacmodTxRosMsgHandler::fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                                        pacmod_msgs::VinRpt* new_msg,

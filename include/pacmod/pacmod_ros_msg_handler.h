@@ -96,6 +96,10 @@ private:
   void fillPIDTuningCmdRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                            pacmod_msgs::PIDTuningCmdRpt* new_msg,
                            std::string frame_id);
+  void fillEncoderValue(const std::shared_ptr<PacmodTxMsg>& parser_class,
+                           pacmod_msgs::EncoderValue* new_msg,
+                           std::string frame_id);
+
 #if 0
   void fillVinRpt(const std::shared_ptr<PacmodTxMsg>& parser_class,
                   pacmod_msgs::VinRpt* new_msg,

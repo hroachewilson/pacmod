@@ -417,7 +417,8 @@ void can_read(const can_msgs::Frame::ConstPtr &msg)
     {
       auto dc_parser = std::dynamic_pointer_cast<EncoderValueMsg>(parser_class);
 
-      encoder_value_msg.encoderAngle = (dc_parser->encoderValue);
+      pacmod_msgs::EncoderValue encoder_value_msg;
+      encoder_value_msg.encoderAngle = (dc_parser->encoderAngle);
       encoder_value_pub.publish(encoder_value_msg);
     }
   }
@@ -461,7 +462,7 @@ int main(int argc, char *argv[])
   brake_rpt_pub = n.advertise<pacmod_msgs::SystemRptFloat>("parsed_tx/brake_rpt", 20);
   vehicle_speed_rpt_pub = n.advertise<pacmod_msgs::VehicleSpeedRpt>("parsed_tx/vehicle_speed_rpt", 20);
   pid_tune_rpt_pub = n.advertise<pacmod_msgs::PIDTuningCmdRpt>("parsed_tx/pid_tune_rpt", 20);
-  encoder_value_pub = n.advertise<pacmod_msgs::EncoderValue("encoder_value", 100);
+  encoder_value_pub = n.advertise<pacmod_msgs::EncoderValue>("encoder_value", 100);
   vehicle_speed_rpt_ms_pub = n.advertise<std_msgs::Float64>("as_tx/vehicle_speed_rpt", 20);
   enable_pub = n.advertise<std_msgs::Bool>("as_tx/enable", 20, true);
 

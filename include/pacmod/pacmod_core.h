@@ -386,8 +386,8 @@ class EncoderValueMsg :
 
   float encoderAngle;
 
-  void encoderToAngle(uint8_t *in);
-}
+  void parse(uint8_t *in);
+};
 
 #if 0
 class ParkingBrakeStatusRptMsg :
