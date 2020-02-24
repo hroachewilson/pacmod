@@ -44,6 +44,7 @@ const int64_t AS::Drivers::PACMod::SteerRpt3Msg::CAN_ID = 0x7F;               //
 const int64_t AS::Drivers::PACMod::PIDTuningCmdMsg::CAN_ID = 0x42;
 const int64_t AS::Drivers::PACMod::PIDTuningCmdRptMsg::CAN_ID = 0x43;
 const int64_t AS::Drivers::PACMod::ControlModeMsg::CAN_ID = 0x02;
+const int64_t AS::Drivers::PACMod::HeartbeatVCUMsg::CAN_ID = 0x05;
 #if 0 
 const int64_t AS::Drivers::PACMod::ParkingBrakeStatusRptMsg::CAN_ID = 0x80; 
 #endif
@@ -440,6 +441,15 @@ void HornCmdMsg::encode(uint8_t horn_cmd)
   data[0] = horn_cmd;
 }
 #endif
+
+void HeartbeatVCUMsg::encode(uint16_t expected_msg)
+{
+  data.assign(8,0);
+  data[0] = (0xFF000000 & expected_msg) >> 24;
+  data[1] = (0x00FF0000 & expected_msg) >> 16;
+  data[2] = (0x0000FF00 & expected_msg) >> 8;
+  data[3] = 0x000000FF & expected_msg; 
+}
 
 void AccelCmdMsg::encode(double accel_cmd)
 {

@@ -116,6 +116,8 @@ public:
                                               const pacmod_msgs::PIDTuningCmd::ConstPtr& msg);
   static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
                                               const pacmod_msgs::ControlMode::ConstPtr& msg);
+  static std::vector<uint8_t> unpackAndEncode(const int64_t& can_id,
+                                              const pacmod_msgs::HeartbeatVCU::ConstPtr& msg);
 };
 }   // namespace PACMod
 }   // namespace Drivers

@@ -7,7 +7,7 @@
        LEXUS_RX_450H: The hybrid version of the Lexus RX-450 SUV. -->
   <arg name="pacmod_vehicle_type" default="AEV_DEV_MULE" />
   <arg name="use_kvaser" default="true" />
-  <arg name="kvaser_hardware_id" default="048040" />
+  <arg name="kvaser_hardware_id" default="048054" />
   <arg name="kvaser_circuit_id" default="0" />
   <arg name="use_socketcan" default="false" />
   <arg name="socketcan_device" default="can0" />

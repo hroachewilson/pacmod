@@ -557,3 +557,16 @@ std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_i
   }
 }
 
+std::vector<uint8_t> PacmodRxRosMsgHandler::unpackAndEncode(const int64_t& can_id,
+                                                            const pacmod_msgs::HeartbeatVCU::ConstPtr& msg)
+{
+  std::vector<uint8_t> ret_vec;
+
+  if (can_id == HeartbeatVCUMsg::CAN_ID)
+  {
+    HeartbeatVCUMsg encoder;
+    encoder.encode(msg->heartbeat_msg);
+    return encoder.data;
+  }
+}
+

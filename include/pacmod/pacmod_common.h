@@ -34,6 +34,7 @@
 #include "ControlMode.h"
 #include "PIDTuningCmd.h"
 #include "PIDTuningCmdRpt.h"
+#include "HeartbeatVCU.h"
 //#include <pacmod_msgs/VinRpt.h>
 #include <pacmod_msgs/WheelSpeedRpt.h>
 #include <pacmod_msgs/YawRateRpt.h>

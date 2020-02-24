@@ -463,6 +463,15 @@ public:
   void encode(double accel_cmd);
 };
 
+class HeartbeatVCUMsg :
+  public PacmodRxMsg
+{
+public:
+  static const int64_t CAN_ID;
+
+  void encode(uint16_t expected_msg);
+};
+
 class VehicleSpeedCmdMsg :
   public PacmodRxMsg
 {

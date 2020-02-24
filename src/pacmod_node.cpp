@@ -117,7 +117,7 @@ void callback_accelerator_set_cmd(const pacmod_msgs::PacmodCmd::ConstPtr& msg)
   }
 }
 
-// Listens for incoming requests to change the position of the throttle pedal
+// Listens for incoming requests to change the speed of the vehicle
 void callback_vehicle_speed_set_cmd(const pacmod_msgs::VehicleSpeedCmd::ConstPtr& msg)
 {
   int64_t can_id = VehicleSpeedCmdMsg::CAN_ID;
@@ -202,10 +202,27 @@ void callback_brake_set_cmd(const pacmod_msgs::PacmodCmd::ConstPtr& msg)
   }
 }
 
-// Listens for incoming requests to change the position of the brake pedal
+// Listens for incoming requests to change the autonomous mode of the vehicle;
 void callback_control_mode(const pacmod_msgs::ControlMode::ConstPtr& msg)
 {
   int64_t can_id = ControlModeMsg::CAN_ID;
+  auto rx_it = rx_list.find(can_id);
+
+  if (rx_it != rx_list.end())
+  {
+    rx_it->second->setData(PacmodRxRosMsgHandler::unpackAndEncode(can_id, msg));
+    rx_it->second->setIsValid(true);
+  }
+  else
+  {
+    ROS_WARN("Received command message for ID 0x%lx for which we did not have an encoder.", can_id);
+  }
+}
+
+// Listens for incoming requests to change the autonomous mode of the vehicle;
+void callback_heartbeat_vcu(const pacmod_msgs::HeartbeatVCU::ConstPtr& msg)
+{
+  int64_t can_id = HeartbeatVCUMsg::CAN_ID;
   auto rx_it = rx_list.find(can_id);
 
   if (rx_it != rx_list.end())
@@ -481,6 +498,7 @@ int main(int argc, char *argv[])
   ros::Subscriber enable_sub = n.subscribe("as_rx/enable", 20, callback_pacmod_enable);
   ros::Subscriber pid_tuning_cmd_sub = n.subscribe("as_rx/pid_cmd", 20, callback_pid_tuning_cmd);
   ros::Subscriber control_mode_sub = n.subscribe("as_rx/control_mode",20,callback_control_mode);
+  ros::Subscriber heartbeat_vcu_sub = n.subscribe("as_rx/heartbeat", 20, callback_heartbeat_vcu);
 
   // Populate rx list
   std::shared_ptr<LockedData> global_data(new LockedData);
@@ -492,6 +510,7 @@ int main(int argc, char *argv[])
   std::shared_ptr<LockedData> pid_tuning_data(new LockedData);
   std::shared_ptr<LockedData> steer_cmd_data(new LockedData);
   std::shared_ptr<LockedData> control_mode_data(new LockedData);
+  std::shared_ptr<LockedData> heartbeat_vcu_data(new LockedData);
 
   rx_list.insert(std::make_pair(GlobalCmdMsg::CAN_ID, global_data));
   rx_list.insert(std::make_pair(AccelCmdMsg::CAN_ID, accel_data));
@@ -501,6 +520,7 @@ int main(int argc, char *argv[])
   rx_list.insert(std::make_pair(PIDTuningCmdMsg::CAN_ID, pid_tuning_data));
   rx_list.insert(std::make_pair(BrakeCmdMsg::CAN_ID, brake_data));
   rx_list.insert(std::make_pair(ControlModeMsg::CAN_ID, control_mode_data));
+  rx_list.insert(std::make_pair(HeartbeatVCUMsg::CAN_ID, control_mode_data));
 
   rpt_cmd_list.insert(std::make_pair(AccelRptMsg::CAN_ID, AccelCmdMsg::CAN_ID));
 #if 0
