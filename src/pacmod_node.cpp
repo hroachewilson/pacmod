@@ -70,6 +70,7 @@ ros::Publisher vehicle_speed_rpt_ms_pub;
 ros::Publisher enable_pub;
 ros::Publisher can_rx_pub;
 ros::Publisher pid_tune_rpt_pub;
+ros::Publisher encoder_value_pub;
 
 std::unordered_map<int64_t, std::shared_ptr<LockedData>> rx_list;
 std::unordered_map<int64_t, int64_t> rpt_cmd_list;
@@ -412,6 +413,13 @@ void can_read(const can_msgs::Frame::ConstPtr &msg)
       pid_tune_rpt_msg.value = (dc_parser->value);
       pid_tune_rpt_pub.publish(pid_tune_rpt_msg);
     }
+    else if (msg->id == EncoderValueMsg::CAN_ID)
+    {
+      auto dc_parser = std::dynamic_pointer_cast<EncoderValueMsg>(parser_class);
+
+      encoder_value_msg.encoderAngle = (dc_parser->encoderValue);
+      encoder_value_pub.publish(encoder_value_msg);
+    }
   }
 }
 
@@ -453,6 +461,7 @@ int main(int argc, char *argv[])
   brake_rpt_pub = n.advertise<pacmod_msgs::SystemRptFloat>("parsed_tx/brake_rpt", 20);
   vehicle_speed_rpt_pub = n.advertise<pacmod_msgs::VehicleSpeedRpt>("parsed_tx/vehicle_speed_rpt", 20);
   pid_tune_rpt_pub = n.advertise<pacmod_msgs::PIDTuningCmdRpt>("parsed_tx/pid_tune_rpt", 20);
+  encoder_value_pub = n.advertise<pacmod_msgs::EncoderValue("encoder_value", 100);
   vehicle_speed_rpt_ms_pub = n.advertise<std_msgs::Float64>("as_tx/vehicle_speed_rpt", 20);
   enable_pub = n.advertise<std_msgs::Bool>("as_tx/enable", 20, true);
 
@@ -470,6 +479,7 @@ int main(int argc, char *argv[])
   pub_tx_list.insert(std::make_pair(BrakeRptMsg::CAN_ID, brake_rpt_pub));
   pub_tx_list.insert(std::make_pair(VehicleSpeedRptMsg::CAN_ID, vehicle_speed_rpt_pub));
   pub_tx_list.insert(std::make_pair(PIDTuningCmdRptMsg::CAN_ID, pid_tune_rpt_pub));
+  pub_tx_list.insert(std::make_pair(EncoderValueMsg::CAN_ID, encoder_value_pub));
 
   // Subscribe to messages
   ros::Subscriber can_tx_sub = n.subscribe("can_tx", 20, can_read);;

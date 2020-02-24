@@ -53,6 +53,8 @@ const int64_t AS::Drivers::PACMod::DateTimeRptMsg::CAN_ID = 0x83;
 #if 0 
 const int64_t AS::Drivers::PACMod::VinRptMsg::CAN_ID = 0xFF;                  // Chenge to AEV vin
 #endif
+/************************* Message by Farbod ****************************/
+const int64_t AS::Drivers::PACMod::EncoderAngleMsg::CAN_ID = 0x2B0;
 
 /*******************************************************************************/
 std::shared_ptr<PacmodTxMsg> PacmodTxMsg::make_message(const int64_t& can_id)
@@ -134,6 +136,9 @@ std::shared_ptr<PacmodTxMsg> PacmodTxMsg::make_message(const int64_t& can_id)
     break;
   case PIDTuningCmdRptMsg::CAN_ID:
     return std::shared_ptr<PacmodTxMsg>(new PIDTuningCmdRptMsg);
+    break;
+  case EncoderValueMsg::CAN_ID:
+    return std::shared_ptr<PacmodTxMsg>(new EncoderValueMsg);
     break;
 #if 0
   case VinRptMsg::CAN_ID:
@@ -358,6 +363,28 @@ void PIDTuningCmdRptMsg::parse(uint8_t *in)
   temp[1] = in[4];
   temp[2] = in[3];
   temp[3] = in[2];
+}
+
+void EncoderValueMsg::encoderToAngle(uint8_t *in)
+{
+  uint8 byte0;
+  byte0 = *in;
+  in++;
+
+  uint16 encoderValue;
+  encoderValue = byte0 | (*in << 8);
+
+  #define encoderLockAngle 7800
+  #define twotothe16 65536
+
+  if (encoderValue > encoderLockAngle)
+  {
+      encoderAngle = (encoderValue - twotothe16)/10;
+  }
+  else
+  {
+      encoderAngle = encoderValue/10;
+  }
 }
 
 #if 0

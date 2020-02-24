@@ -378,6 +378,17 @@ public:
   void parse(uint8_t *in);
 };
 
+class EncoderValueMsg :
+  public PacmodTxMsg
+{
+  public:
+  static const int64_t CAN_ID;
+
+  float encoderAngle;
+
+  void encoderToAngle(uint8_t *in);
+}
+
 #if 0
 class ParkingBrakeStatusRptMsg :
   public PacmodTxMsg
