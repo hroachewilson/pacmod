@@ -418,6 +418,7 @@ void can_read(const can_msgs::Frame::ConstPtr &msg)
       auto dc_parser = std::dynamic_pointer_cast<EncoderValueMsg>(parser_class);
 
       pacmod_msgs::EncoderValue encoder_value_msg;
+      encoder_value_msg.header.stamp = ros::Time::now();
       encoder_value_msg.encoderAngle = (dc_parser->encoderAngle);
       encoder_value_pub.publish(encoder_value_msg);
     }

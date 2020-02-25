@@ -385,6 +385,8 @@ void EncoderValueMsg::parse(uint8_t *in)
   {
       encoderAngle = encoderValue/10;
   }
+
+  encoderAngle = (encoderAngle/314) * 0.675;
 }
 
 #if 0
@@ -497,7 +499,8 @@ void RearSteerCmdMsg::encode(double steer_pos, double steer_spd)
   data.assign(8, 0);
   int32_t raw_pos = static_cast<int32_t>(1000.0 * steer_pos);
   uint32_t raw_spd = (uint32_t)(1000.0 * steer_spd);
-
+6E;
+const int64_t AS::Drivers::PACMod::VehicleSpeedRptMsg::CAN_ID = 0
   data[0] = (raw_pos & 0xFF000000) >> 24;
   data[1] = (raw_pos & 0x00FF0000) >> 16;
   data[2] = (raw_pos & 0x0000FF00) >> 8;
