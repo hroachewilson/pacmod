@@ -445,10 +445,7 @@ void HornCmdMsg::encode(uint8_t horn_cmd)
 void HeartbeatVCUMsg::encode(uint16_t expected_msg)
 {
   data.assign(8,0);
-  data[0] = (0xFF000000 & expected_msg) >> 24;
-  data[1] = (0x00FF0000 & expected_msg) >> 16;
-  data[2] = (0x0000FF00 & expected_msg) >> 8;
-  data[3] = 0x000000FF & expected_msg; 
+  data[0] = 0x000000FF & expected_msg; 
 }
 
 void AccelCmdMsg::encode(double accel_cmd)
